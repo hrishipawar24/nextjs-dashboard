@@ -144,4 +144,9 @@ const revenue = [
   { month: 'Dec', revenue: 4800 },
 ];
 
-export { users, customers, invoices, revenue };
+const invoicesWithId = invoices.map((invoice, index) => ({
+  ...invoice,
+  id: `invoice-${index}`,
+}));
+
+export { users, customers, invoicesWithId as invoices, revenue };
