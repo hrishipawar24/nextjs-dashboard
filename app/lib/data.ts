@@ -15,8 +15,13 @@ import { formatCurrency } from './utils';
 
 export async function fetchRevenue() {
   try {
-    // Artificial delay to simulate network latency
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // We artificially delay a response for demo purposes.
+    // Don't do this in production :)
+    console.log('Fetching revenue data...');
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    console.log('Data fetch completed after 3 seconds.');
+
     return revenue;
   } catch (error) {
     console.error('Database Error:', error);
