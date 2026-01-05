@@ -50,3 +50,53 @@ export async function createInvoice(formData: FormData) {
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
 }
+
+const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+
+export async function updateInvoice(id: string, formData: FormData) {
+  const { customerId, amount, status } = UpdateInvoice.parse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+ 
+  const amountInCents = amount * 100;
+ 
+  try {
+    // await sql`
+    //   UPDATE invoices
+    //   SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+    //   WHERE id = ${id}
+    // `;
+    
+    const invoiceIndex = invoices.findIndex((invoice) => invoice.id === id);
+    if (invoiceIndex !== -1) {
+      invoices[invoiceIndex] = {
+        ...invoices[invoiceIndex],
+        customer_id: customerId,
+        amount: amountInCents,
+        status: status,
+      };
+    }
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to update invoice: ${(error as Error).message}`);
+  }
+ 
+  revalidatePath('/dashboard/invoices');
+  redirect('/dashboard/invoices');
+}
+
+export async function deleteInvoice(id: string) {
+  try {
+    // await sql`DELETE FROM invoices WHERE id = ${id}`;
+    const invoiceIndex = invoices.findIndex((invoice) => invoice.id === id);
+    if (invoiceIndex !== -1) {
+      invoices.splice(invoiceIndex, 1);
+    }
+    revalidatePath('/dashboard/invoices');
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to delete invoice.');
+  }
+}
