@@ -2,7 +2,7 @@ import {
   customers,
   invoices,
   revenue,
-} from './placeholder-data';
+} from './mock-db';
 import {
   CustomerField,
   CustomersTableType,
